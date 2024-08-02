@@ -24,7 +24,7 @@ project(libffmpegJNI C CXX)
 set(ffmpeg_location "${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg")
 set(ffmpeg_binaries "${ffmpeg_location}/android-libs/${ANDROID_ABI}")
 
-foreach(ffmpeg_lib avutil swresample avcodec swscale av3a_binaural_render AVS3AudioDec)
+foreach(ffmpeg_lib avutil swresample avcodec swscale)
     set(ffmpeg_lib_filename lib${ffmpeg_lib}.so)
     set(ffmpeg_lib_file_path ${ffmpeg_binaries}/${ffmpeg_lib_filename})
     add_library(
@@ -66,14 +66,11 @@ add_library(ffmpegJNI
 
 target_link_libraries(ffmpegJNI
                       PRIVATE android
-                      PRIVATE m
                       PRIVATE swresample
                       PRIVATE avcodec
                       PRIVATE avutil
                       PRIVATE swscale
                       PRIVATE yuv
-                      PRIVATE av3a_binaural_render
-                      PRIVATE AVS3AudioDec
                       PRIVATE ${android_log_lib})
 
 # Additional flags needed for "arm64-v8a" from NDK 23.1.7779620 and above.
