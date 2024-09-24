@@ -13,33 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package androidx.media3.container;
+package androidx.media3.extractor.mp4;
 
 import androidx.annotation.Nullable;
 import androidx.media3.common.util.ParsableByteArray;
-import androidx.media3.common.util.UnstableApi;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/** A representation of an MP4 box (aka atom). */
 @SuppressWarnings("ConstantField")
-@UnstableApi
-public abstract class Mp4Box {
+/* package */ abstract class Atom {
 
-  /** Size of a box header, in bytes. */
+  /** Size of an atom header, in bytes. */
   public static final int HEADER_SIZE = 8;
 
-  /** Size of a full box header, in bytes. */
+  /** Size of a full atom header, in bytes. */
   public static final int FULL_HEADER_SIZE = 12;
 
-  /** Size of a long box header, in bytes. */
+  /** Size of a long atom header, in bytes. */
   public static final int LONG_HEADER_SIZE = 16;
 
-  /** Value for the size field in a box that defines its size in the largesize field. */
+  /** Value for the size field in an atom that defines its size in the largesize field. */
   public static final int DEFINES_LARGE_SIZE = 1;
 
-  /** Value for the size field in a box that extends to the end of the file. */
+  /** Value for the size field in an atom that extends to the end of the file. */
   public static final int EXTENDS_TO_END_SIZE = 0;
 
   @SuppressWarnings("ConstantCaseForConstants")
@@ -115,9 +112,6 @@ public abstract class Mp4Box {
   public static final int TYPE_s263 = 0x73323633;
 
   public static final int TYPE_H263 = 0x48323633;
-
-  @SuppressWarnings("ConstantCaseForConstants")
-  public static final int TYPE_h263 = 0x68323633;
 
   @SuppressWarnings("ConstantCaseForConstants")
   public static final int TYPE_d263 = 0x64323633;
@@ -453,48 +447,60 @@ public abstract class Mp4Box {
   public static final int TYPE_iacb = 0x69616362;
 
   @SuppressWarnings("ConstantCaseForConstants")
-  public static final int TYPE_edvd = 0x65647664;
+  public static final int TYPE_ap4x = 0x61703468;
+
+  @SuppressWarnings("ConstantCaseForConstants")
+  public static final int TYPE_apch = 0x61706368;
+
+  @SuppressWarnings("ConstantCaseForConstants")
+  public static final int TYPE_apcn = 0x6170636e;
+
+  @SuppressWarnings("ConstantCaseForConstants")
+  public static final int TYPE_apcs = 0x61706373;
+
+  @SuppressWarnings("ConstantCaseForConstants")
+  public static final int TYPE_apco = 0x6170636f;
+
 
   public final int type;
 
-  // private to only allow sub-classing from within this file.
-  private Mp4Box(int type) {
+  public Atom(int type) {
     this.type = type;
   }
 
   @Override
   public String toString() {
-    return getBoxTypeString(type);
+    return getAtomTypeString(type);
   }
 
-  /** An MP4 box that is a leaf. */
-  public static final class LeafBox extends Mp4Box {
+  /** An MP4 atom that is a leaf. */
+  /* package */ static final class LeafAtom extends Atom {
 
-    /** The box data. */
+    /** The atom data. */
     public final ParsableByteArray data;
 
     /**
-     * @param type The type of the box.
-     * @param data The box data.
+     * @param type The type of the atom.
+     * @param data The atom data.
      */
-    public LeafBox(int type, ParsableByteArray data) {
+    public LeafAtom(int type, ParsableByteArray data) {
       super(type);
       this.data = data;
     }
   }
 
-  /** An MP4 box that has child boxes. */
-  public static final class ContainerBox extends Mp4Box {
+  /** An MP4 atom that has child atoms. */
+  /* package */ static final class ContainerAtom extends Atom {
 
     public final long endPosition;
-    public final List<LeafBox> leafChildren;
-    public final List<ContainerBox> containerChildren;
+    public final List<LeafAtom> leafChildren;
+    public final List<ContainerAtom> containerChildren;
 
     /**
-     * @param type The type of the box.
-     * @param endPosition The position of the first byte after the end of the box.
+     * @param type The type of the atom.
+     * @param endPosition The position of the first byte after the end of the atom.
      */
-    public ContainerBox(int type, long endPosition) {
+    public ContainerAtom(int type, long endPosition) {
       super(type);
       this.endPosition = endPosition;
       leafChildren = new ArrayList<>();
@@ -504,19 +510,19 @@ public abstract class Mp4Box {
     /**
      * Adds a child leaf to this container.
      *
-     * @param box The child to add.
+     * @param atom The child to add.
      */
-    public void add(LeafBox box) {
-      leafChildren.add(box);
+    public void add(LeafAtom atom) {
+      leafChildren.add(atom);
     }
 
     /**
      * Adds a child container to this container.
      *
-     * @param box The child to add.
+     * @param atom The child to add.
      */
-    public void add(ContainerBox box) {
-      containerChildren.add(box);
+    public void add(ContainerAtom atom) {
+      containerChildren.add(atom);
     }
 
     /**
@@ -529,12 +535,12 @@ public abstract class Mp4Box {
      * @return The child leaf of the given type, or null if no such child exists.
      */
     @Nullable
-    public LeafBox getLeafBoxOfType(int type) {
+    public LeafAtom getLeafAtomOfType(int type) {
       int childrenSize = leafChildren.size();
       for (int i = 0; i < childrenSize; i++) {
-        LeafBox box = leafChildren.get(i);
-        if (box.type == type) {
-          return box;
+        LeafAtom atom = leafChildren.get(i);
+        if (atom.type == type) {
+          return atom;
         }
       }
       return null;
@@ -550,20 +556,45 @@ public abstract class Mp4Box {
      * @return The child container of the given type, or null if no such child exists.
      */
     @Nullable
-    public ContainerBox getContainerBoxOfType(int type) {
+    public ContainerAtom getContainerAtomOfType(int type) {
       int childrenSize = containerChildren.size();
       for (int i = 0; i < childrenSize; i++) {
-        ContainerBox box = containerChildren.get(i);
-        if (box.type == type) {
-          return box;
+        ContainerAtom atom = containerChildren.get(i);
+        if (atom.type == type) {
+          return atom;
         }
       }
       return null;
     }
 
+    /**
+     * Returns the total number of leaf/container children of this atom with the given type.
+     *
+     * @param type The type of child atoms to count.
+     * @return The total number of leaf/container children of this atom with the given type.
+     */
+    public int getChildAtomOfTypeCount(int type) {
+      int count = 0;
+      int size = leafChildren.size();
+      for (int i = 0; i < size; i++) {
+        LeafAtom atom = leafChildren.get(i);
+        if (atom.type == type) {
+          count++;
+        }
+      }
+      size = containerChildren.size();
+      for (int i = 0; i < size; i++) {
+        ContainerAtom atom = containerChildren.get(i);
+        if (atom.type == type) {
+          count++;
+        }
+      }
+      return count;
+    }
+
     @Override
     public String toString() {
-      return getBoxTypeString(type)
+      return getAtomTypeString(type)
           + " leaves: "
           + Arrays.toString(leafChildren.toArray())
           + " containers: "
@@ -571,13 +602,23 @@ public abstract class Mp4Box {
     }
   }
 
+  /** Parses the version number out of the additional integer component of a full atom. */
+  public static int parseFullAtomVersion(int fullAtomInt) {
+    return 0x000000FF & (fullAtomInt >> 24);
+  }
+
+  /** Parses the atom flags out of the additional integer component of a full atom. */
+  public static int parseFullAtomFlags(int fullAtomInt) {
+    return 0x00FFFFFF & fullAtomInt;
+  }
+
   /**
-   * Converts a numeric box type to the corresponding four character string.
+   * Converts a numeric atom type to the corresponding four character string.
    *
-   * @param type The numeric box type.
+   * @param type The numeric atom type.
    * @return The corresponding four character string.
    */
-  public static String getBoxTypeString(int type) {
+  public static String getAtomTypeString(int type) {
     return ""
         + (char) ((type >> 24) & 0xFF)
         + (char) ((type >> 16) & 0xFF)
