@@ -153,6 +153,8 @@ public final class FfmpegLibrary {
         return "pcm_mulaw";
       case MimeTypes.AUDIO_ALAW:
         return "pcm_alaw";
+      case MimeTypes.AUDIO_AV3A:
+        return "libarcdav3a";
       case MimeTypes.VIDEO_H264:
         return "h264";
       case MimeTypes.VIDEO_H265:
