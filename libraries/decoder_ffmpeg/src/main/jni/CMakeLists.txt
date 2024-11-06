@@ -66,6 +66,7 @@ add_library(ffmpegJNI
 
 target_link_libraries(ffmpegJNI
                       PRIVATE android
+                      PRIVATE m
                       PRIVATE swresample
                       PRIVATE avcodec
                       PRIVATE avutil
