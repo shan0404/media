@@ -46,9 +46,9 @@ COMMON_OPTIONS="
     --disable-v4l2-m2m
     --disable-vulkan
     --enable-libarcdav3a
-    --enable-decoder=vorbis,opus,flac,alac,pcm_mulaw,pcm_alaw,mp3,amrnb,amrwb,aac,ac3,eac3,dca,mlp,truehd,libarcdav3a
-    --enable-gpu
-    --enable-mmal
+    --enable-decoders
+    --enable-decoder=libarcdav3a
+    --disable-decoder=av1
     "
 TOOLCHAIN_PREFIX="${NDK_PATH}/toolchains/llvm/prebuilt/${HOST_PLATFORM}/bin"
 if [[ ! -d "${TOOLCHAIN_PREFIX}" ]]

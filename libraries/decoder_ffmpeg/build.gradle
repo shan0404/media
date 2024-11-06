@@ -32,6 +32,16 @@ if (project.file('src/main/jni/ffmpeg').exists()) {
     // Should match cmake_minimum_required.
     android.externalNativeBuild.cmake.version = '3.21.0+'
 }
+android {
+    defaultConfig {
+        externalNativeBuild {
+            cmake {
+                arguments "-DANDROID_STL=c++_shared"
+            }
+        }
+    }
+    ndkVersion "25.1.8937393"
+}
 
 dependencies {
     implementation project(modulePrefix + 'lib-decoder')
