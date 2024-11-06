@@ -1043,7 +1043,8 @@ public final class BoxParser {
           || childAtomType == Mp4Box.TYPE_ulaw
           || childAtomType == Mp4Box.TYPE_Opus
           || childAtomType == Mp4Box.TYPE_fLaC
-          || childAtomType == Mp4Box.TYPE_iamf) {
+          || childAtomType == Mp4Box.TYPE_iamf
+          || childAtomType == Mp4Box.TYPE_av3a) {
         parseAudioSampleEntry(
             stsd,
             childAtomType,
@@ -1840,6 +1841,8 @@ public final class BoxParser {
       mimeType = MimeTypes.AUDIO_TRUEHD;
     } else if (atomType == Mp4Box.TYPE_iamf) {
       mimeType = MimeTypes.AUDIO_IAMF;
+    } else if (atomType == Mp4Box.TYPE_av3a) {
+      mimeType = MimeTypes.AUDIO_AV3A;
     }
 
     @Nullable List<byte[]> initializationData = null;
