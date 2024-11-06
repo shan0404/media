@@ -470,6 +470,9 @@ public abstract class Mp4Box {
   @SuppressWarnings("ConstantCaseForConstants")
   public static final int TYPE_apco = 0x6170636f;
 
+  @SuppressWarnings("ConstantCaseForConstants")
+  public static final int TYPE_av3a = 0x61763361;
+
 
   public final int type;
 
