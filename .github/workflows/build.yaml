@@ -29,7 +29,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Build Project with gradle
-        run: ./gradlew media:libraries:container:assembleDebug
+        run: ./gradlew :media:libraries:container:assembleDebug
 
       - uses: actions/upload-artifact@v4.4.3
         with:
