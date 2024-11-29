@@ -28,10 +28,18 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Build Project with gradle
+      - name: Build Project with gradle lib-decoder-ffmpeg
         run: ./gradlew :lib-decoder-ffmpeg:assembleRelease
 
       - uses: actions/upload-artifact@v4.4.3
         with:
           name: lib-decoder-ffmpeg-release.aar
           path: libraries/decoder_ffmpeg/buildout/outputs/aar/lib-decoder-ffmpeg-release.aar
+
+      - name: Build Project with gradle lib-exoplayer
+        run: ./gradlew :lib-exoplayer:assembleRelease
+
+      - uses: actions/upload-artifact@v4.4.3
+        with:
+          name: lib-exoplayer-release.aar
+          path: libraries/exoplayer/buildout/outputs/aar/lib-exoplayer-release.aar
