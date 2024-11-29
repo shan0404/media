@@ -43,3 +43,118 @@ jobs:
         with:
           name: lib-exoplayer-release.aar
           path: libraries/exoplayer/buildout/outputs/aar/lib-exoplayer-release.aar
+
+      - name: Build Project with gradle lib-exoplayer-dash
+        run: ./gradlew :lib-exoplayer-dash:assembleRelease
+
+      - uses: actions/upload-artifact@v4.4.3
+        with:
+          name: lib-exoplayer-dash-release.aar
+          path: libraries/exoplayer_dash/buildout/outputs/aar/lib-exoplayer-dash-release.aar
+
+      - name: Build Project with gradle lib-ui
+        run: ./gradlew :lib-ui:assembleRelease
+
+      - uses: actions/upload-artifact@v4.4.3
+        with:
+          name: lib-ui-release.aar
+          path: libraries/ui/buildout/outputs/aar/lib-ui-release.aar
+
+      - name: Build Project with gradle lib-common
+        run: ./gradlew :lib-common:assembleRelease
+
+      - uses: actions/upload-artifact@v4.4.3
+        with:
+          name: lib-common-release.aar
+          path: libraries/common/buildout/outputs/aar/lib-common-release.aar
+
+      - name: Build Project with gradle lib-database
+        run: ./gradlew :lib-database:assembleRelease
+
+      - uses: actions/upload-artifact@v4.4.3
+        with:
+          name: lib-database-release.aar
+          path: libraries/database/buildout/outputs/aar/lib-database-release.aar
+
+      - name: Build Project with gradle lib-datasource
+        run: ./gradlew :lib-datasource:assembleRelease
+
+      - uses: actions/upload-artifact@v4.4.3
+        with:
+          name: lib-datasource-release.aar
+          path: libraries/datasource/buildout/outputs/aar/lib-datasource-release.aar
+
+      - name: Build Project with gradle lib-datasource-okhttp
+        run: ./gradlew :lib-datasource-okhttp:assembleRelease
+
+      - uses: actions/upload-artifact@v4.4.3
+        with:
+          name: lib-datasource-okhttp-release.aar
+          path: libraries/datasource_okhttp/buildout/outputs/aar/lib-datasource-okhttp-release.aar
+
+      - name: Build Project with gradle lib-datasource-rtmp
+        run: ./gradlew :lib-datasource-rtmp:assembleRelease
+
+      - uses: actions/upload-artifact@v4.4.3
+        with:
+          name: lib-datasource-rtmp-release.aar
+          path: libraries/datasource_rtmp/buildout/outputs/aar/lib-datasource-rtmp-release.aar
+
+      - name: Build Project with gradle lib-decoder
+        run: ./gradlew :lib-decoder:assembleRelease
+
+      - uses: actions/upload-artifact@v4.4.3
+        with:
+          name: lib-decoder-release.aar
+          path: libraries/decoder/buildout/outputs/aar/lib-decoder-release.aar
+
+      - name: Build Project with gradle lib-decoder-av1
+        run: ./gradlew :lib-decoder-av1:assembleRelease
+
+      - uses: actions/upload-artifact@v4.4.3
+        with:
+          name: lib-decoder-av1-release.aar
+          path: libraries/decoder_av1/buildout/outputs/aar/lib-decoder-av1-release.aar
+
+      - name: Build Project with gradle lib-container
+        run: ./gradlew :lib-container:assembleRelease
+
+      - uses: actions/upload-artifact@v4.4.3
+        with:
+          name: lib-container-release.aar
+          path: libraries/container/buildout/outputs/aar/lib-container-release.aar
+
+      - name: Build Project with gradle lib-exoplayer-hls
+        run: ./gradlew :lib-exoplayer-hls:assembleRelease
+
+      - uses: actions/upload-artifact@v4.4.3
+        with:
+          name: lib-exoplayer-hls-release.aar
+          path: libraries/exoplayer_hls/buildout/outputs/aar/lib-exoplayer-hls-release.aar
+
+      - name: Build Project with gradle lib-exoplayer-rtsp
+        run: ./gradlew :lib-exoplayer-rtsp:assembleRelease
+
+      - uses: actions/upload-artifact@v4.4.3
+        with:
+          name: lib-exoplayer-rtsp-release.aar
+          path: libraries/exoplayer_rtsp/buildout/outputs/aar/lib-exoplayer-rtsp-release.aar
+
+      - name: Build Project with gradle lib-exoplayer-smoothstreaming
+        run: ./gradlew :lib-exoplayer-smoothstreaming:assembleRelease
+
+      - uses: actions/upload-artifact@v4.4.3
+        with:
+          name: lib-exoplayer-smoothstreaming-release.aar
+          path: libraries/exoplayer_smoothstreaming/buildout/outputs/aar/lib-exoplayer-smoothstreaming-release.aar
+
+      - name: Build Project with gradle lib-extractor
+        run: ./gradlew :lib-extractor:assembleRelease
+
+      - uses: actions/upload-artifact@v4.4.3
+        with:
+          name: lib-extractor-release.aar
+          path: libraries/extractor/buildout/outputs/aar/lib-extractor-release.aar
+
+
+
