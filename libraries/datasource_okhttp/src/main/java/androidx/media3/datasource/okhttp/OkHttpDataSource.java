@@ -398,7 +398,9 @@ public class OkHttpDataSource extends BaseDataSource implements HttpDataSource {
       builder.header(header.getKey(), header.getValue());
     }
 
-    @Nullable String rangeHeader = buildRangeRequestHeader(position, length);
+    //@Nullable String rangeHeader = buildRangeRequestHeader(position, length);
+
+    @Nullable String rangeHeader = buildRangeRequestHeader(position, length,dataSpec.uri.getPort()==8089);
     if (rangeHeader != null) {
       builder.addHeader(HttpHeaders.RANGE, rangeHeader);
     }
