@@ -50,7 +50,6 @@ public final class HttpUtil {
    */
   @Nullable
   public static String buildRangeRequestHeader(long position, long length) {
-    /*
     if (position == 0 && length == C.LENGTH_UNSET) {
       return null;
     }
@@ -59,19 +58,6 @@ public final class HttpUtil {
     rangeValue.append(position);
     rangeValue.append("-");
     if (length != C.LENGTH_UNSET) {
-      rangeValue.append(position + length - 1);
-    }
-    return rangeValue.toString();*/
-
-
-    //修复请求视频流无响应信息
-    StringBuilder rangeValue = new StringBuilder();
-    rangeValue.append("bytes=");
-    rangeValue.append(position);
-    rangeValue.append("-");
-    if (length == C.LENGTH_UNSET) {
-      rangeValue.append(length);
-    }else{
       rangeValue.append(position + length - 1);
     }
     return rangeValue.toString();
