@@ -135,7 +135,7 @@ public class OkHttpDataSource extends BaseDataSource implements HttpDataSource {
 
     /**
      * Sets a content type {@link Predicate}. If a content type is rejected by the predicate then a
-     * {@link HttpDataSource.InvalidContentTypeException} is thrown from {@link
+     * {@link InvalidContentTypeException} is thrown from {@link
      * OkHttpDataSource#open(DataSpec)}.
      *
      * <p>The default is {@code null}.
@@ -398,9 +398,7 @@ public class OkHttpDataSource extends BaseDataSource implements HttpDataSource {
       builder.header(header.getKey(), header.getValue());
     }
 
-    //@Nullable String rangeHeader = buildRangeRequestHeader(position, length);
-
-    @Nullable String rangeHeader = buildRangeRequestHeader(position, length,dataSpec.uri.getPort()==8089);
+    @Nullable String rangeHeader = buildRangeRequestHeader(position, length);
     if (rangeHeader != null) {
       builder.addHeader(HttpHeaders.RANGE, rangeHeader);
     }

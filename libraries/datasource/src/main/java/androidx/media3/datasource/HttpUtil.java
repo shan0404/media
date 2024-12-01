@@ -62,22 +62,7 @@ public final class HttpUtil {
     }
     return rangeValue.toString();
   }
-  @Nullable
-  public static String buildRangeRequestHeader(long position, long length,boolean isJP) {
-    if (position == 0 && length == C.LENGTH_UNSET&&!isJP) {
-      return null;
-    }
-    StringBuilder rangeValue = new StringBuilder();
-    rangeValue.append("bytes=");
-    rangeValue.append(position);
-    rangeValue.append("-");
-    if (length == C.LENGTH_UNSET) {
-      rangeValue.append(length);
-    }else{
-      rangeValue.append(position + length - 1);
-    }
-    return rangeValue.toString();
-  }
+
   /**
    * Attempts to parse the document size from a {@link HttpHeaders#CONTENT_RANGE Content-Range
    * header}.
