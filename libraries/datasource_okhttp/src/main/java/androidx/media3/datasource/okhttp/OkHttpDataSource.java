@@ -17,6 +17,7 @@ package androidx.media3.datasource.okhttp;
 
 import static androidx.media3.common.util.Util.castNonNull;
 import static androidx.media3.datasource.HttpUtil.buildRangeRequestHeader;
+import static androidx.media3.datasource.HttpUtil.buildRangeRequestHeaderForJP;
 import static java.lang.Math.min;
 
 import android.net.Uri;
@@ -397,10 +398,8 @@ public class OkHttpDataSource extends BaseDataSource implements HttpDataSource {
     for (Map.Entry<String, String> header : headers.entrySet()) {
       builder.header(header.getKey(), header.getValue());
     }
-
     //@Nullable String rangeHeader = buildRangeRequestHeader(position, length);
-
-    @Nullable String rangeHeader = buildRangeRequestHeader(position, length,dataSpec.uri.getPort()==8089);
+    @Nullable String rangeHeader = dataSpec.uri.getPort()==8089?buildRangeRequestHeaderForJP(position, length):buildRangeRequestHeader(position, length);
     if (rangeHeader != null) {
       builder.addHeader(HttpHeaders.RANGE, rangeHeader);
     }

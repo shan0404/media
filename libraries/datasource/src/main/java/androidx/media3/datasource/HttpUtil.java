@@ -19,6 +19,8 @@ import static androidx.media3.common.util.Assertions.checkNotNull;
 import static java.lang.Math.max;
 
 import android.text.TextUtils;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.media3.common.C;
 import androidx.media3.common.util.Log;
@@ -62,18 +64,13 @@ public final class HttpUtil {
     }
     return rangeValue.toString();
   }
-  @Nullable
-  public static String buildRangeRequestHeader(long position, long length,boolean isJP) {
-    if (position == 0 && length == C.LENGTH_UNSET&&!isJP) {
-      return null;
-    }
+  @NonNull
+  public static String buildRangeRequestHeaderForJP(long position, long length) {
     StringBuilder rangeValue = new StringBuilder();
     rangeValue.append("bytes=");
     rangeValue.append(position);
     rangeValue.append("-");
-    if (length == C.LENGTH_UNSET) {
-      rangeValue.append(length);
-    }else{
+    if (length != C.LENGTH_UNSET) {
       rangeValue.append(position + length - 1);
     }
     return rangeValue.toString();
