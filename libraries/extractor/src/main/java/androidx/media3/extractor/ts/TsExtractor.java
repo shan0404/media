@@ -351,9 +351,9 @@ public final class TsExtractor implements Extractor {
   }
 
   // Extractor implementation.
-
   @Override
   public boolean sniff(ExtractorInput input) throws IOException {
+    skip(input);
     byte[] buffer = tsPacketBuffer.getData();
     input.peekFully(buffer, 0, TS_PACKET_SIZE * SNIFF_TS_PACKET_COUNT);
     for (int startPosCandidate = 0; startPosCandidate < TS_PACKET_SIZE; startPosCandidate++) {
@@ -372,7 +372,23 @@ public final class TsExtractor implements Extractor {
     }
     return false;
   }
-
+  private void skip(ExtractorInput extractorInput) throws IOException {
+    byte[] data = this.tsPacketBuffer.getData();
+    extractorInput.peekFully(data, 0, TS_PACKET_SIZE * SNIFF_TS_PACKET_COUNT);
+    int searchLimit = TS_PACKET_SIZE * SNIFF_TS_PACKET_COUNT - TS_PACKET_SIZE; // 计算搜索范围的限制，避免重复计算
+    int i = 0;
+    while (i < searchLimit) {
+      if (data[i] == TS_SYNC_BYTE) { // 首先检查当前字节是否为同步字节
+        if (data[i + TS_PACKET_SIZE] == TS_SYNC_BYTE) { // 如果是，再检查其后 TS_PACKET_SIZE 位置的字节是否也是同步字节
+          if (i > 0) {
+            extractorInput.skipFully(i);
+          }
+          return; // 找到同步字节，提前退出循环
+        }
+      }
+      i++; // 逐字节查找，直到找到同步字节或达到搜索范围的末尾
+    }
+  }
   @Override
   public void init(ExtractorOutput output) {
     this.output =
@@ -595,10 +611,11 @@ public final class TsExtractor implements Extractor {
     int endOfPacket = syncBytePosition + TS_PACKET_SIZE;
     if (endOfPacket > limit) {
       bytesSinceLastSync += syncBytePosition - searchStart;
-      if (mode == MODE_HLS && bytesSinceLastSync > TS_PACKET_SIZE * 2) {
-        throw ParserException.createForMalformedContainer(
-            "Cannot find sync byte. Most likely not a Transport Stream.", /* cause= */ null);
-      }
+      //修复一直循环第一个ts流
+      //if (mode == MODE_HLS && bytesSinceLastSync > TS_PACKET_SIZE * 2) {
+      //  throw ParserException.createForMalformedContainer(
+      //      "Cannot find sync byte. Most likely not a Transport Stream.", /* cause= */ null);
+      //}
     } else {
       // We have found a packet within the buffer.
       bytesSinceLastSync = 0;
