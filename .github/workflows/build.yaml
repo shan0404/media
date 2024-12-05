@@ -1,9 +1,10 @@
 name: Build lib-decoder-ffmpeg
 
 on:
-  push:
-    branches: [ ffmpeg_1.5.0 ]
-  pull_request:
+  #push:
+  #  branches: [ ffmpegav3a_1.5.0 ]
+  #pull_request:
+   workflow_dispatch:
 concurrency:
   group: build-${{ github.ref }}
   cancel-in-progress: true
